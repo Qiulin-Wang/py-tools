@@ -19,6 +19,7 @@ parser.add_argument('--so', default='\t', help='Separator of output file, defaul
 parser.add_argument(
     '-r', '--reserve_order', action='store_true',
     help='Whether reserve line order according to file 1.')
+parser.add_argument('--k1', action='store_true', help='Whether to keep just one joining column.')
 parser.add_argument('-o', '--output', help='Ouput file.')
 args = parser.parse_args()
 
@@ -44,6 +45,7 @@ f2 = args.f2
 s1 = args.s1
 s2 = args.s2
 so = args.so
+k1 = args.k1
 records = dict()
 lines_cnt = 0
 with open(file1, encoding='utf-8', errors='ignore') as fh:
@@ -79,6 +81,8 @@ with open(file2, encoding='utf-8', errors='ignore') as ih:
         key = parts[f2 - 1]
         if key in records:
             if not records[key]['mapped']:
+                if k1:
+                    parts.pop(f2 - 1)
                 records[key]['addition'] = list(parts)
                 records[key]['mapped'] = True
 
